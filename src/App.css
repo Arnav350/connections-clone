@@ -2,7 +2,6 @@
 
 .header__container {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
@@ -12,7 +11,6 @@
 
 .header__left {
   display: flex;
-  flex-direction: row;
   align-items: center;
 }
 
@@ -20,11 +18,6 @@
   margin: 0 0 5px 0;
   height: 60px;
   width: 60px;
-}
-
-.header__image {
-  height: 100%;
-  width: 100%;
 }
 
 .header__line {
@@ -42,7 +35,6 @@
 .header__create {
   padding: 10px 32px;
   background-color: #000;
-  border: none;
   border-radius: 3px;
   color: #fff;
   font-size: 13px;
@@ -53,3 +45,185 @@
   opacity: 0.8;
   cursor: pointer;
 }
+
+/* Title */
+
+.title__container {
+  display: flex;
+  align-items: center;
+  padding: 0px 128px;
+  gap: 16px;
+  height: 125px;
+  border-bottom: 1px #ccc solid;
+}
+
+.title__title {
+  font-size: 36px;
+}
+
+.title__date {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+/* Row */
+
+.row__container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 128px;
+  height: 45px;
+  border-bottom: 1px #ccc solid;
+}
+
+.row__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 100%;
+  width: 40px;
+  background-color: transparent;
+  border: none;
+  transition: background-color 100ms;
+}
+
+.row__icon:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+.row__mode {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 200ms;
+}
+
+.row__dark {
+  opacity: 0;
+}
+
+/* Settings / Help */
+
+.settings__container,
+.help__container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(4px);
+}
+
+.settings__box,
+.help__box {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  transform: translate(-50%);
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+  width: 600px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 12px -1px rgba(0, 0, 0, .3);
+}
+
+.settings__close,
+.help__close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  padding: 4px;
+}
+
+.settings__close:hover,
+.help__close:hover {
+  cursor: pointer;
+}
+
+.settings__heading {
+  margin-bottom: 16px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.settings__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px #ccc solid;
+}
+
+.settings__link {
+  color: #444;
+}
+
+.help__heading {
+  font-size: 24px;
+}
+
+.help__subheading {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.help__list {
+  padding: 0 0 0 24px;
+}
+
+.help__title {
+  margin: 16px 0 4px 0;
+  font-size: 16px;
+}
+
+.help__para {
+  margin: 12px 0;
+}
+
+.help__groups {
+  display: flex;
+  margin-left: 8px;
+}
+
+.help__colors {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.help__color {
+  height: 20px;
+  width: 20px;
+  border-radius: 4px;
+}
+
+.help__yellow {
+  background-color: #f9df6d;
+}
+
+.help__green {
+  background-color: #a0c35a;
+}
+
+.help__blue {
+  background-color: #b0c4ef;
+}
+
+.help__purple {
+  background-color: #ba81c5;
+}
+
+.help__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 8px;
+  padding: 2px 0
+}
+
+/* Settings */
