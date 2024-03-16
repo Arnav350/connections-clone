@@ -226,4 +226,67 @@
   padding: 2px 0
 }
 
-/* Settings */
+/* Main */
+
+.main__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main__words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 512px;
+}
+
+.main__mistakes {
+  margin: 16px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.main__buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.main__button {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: #000 1px solid;
+  border-radius: 32px;
+  font-weight: 600;
+}
+
+.main__submit {
+  color: #544c43;
+  border-color: #544c43;
+}
+
+.test {
+  position: absolute;
+  transition: top 200ms, left 200ms;
+}
+
+
+/* Word */
+
+.word__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  height: 80px;
+  width: 120px;
+  background-color: #b9b0a6;
+  border-radius: 8px;
+  transition: background-color 300ms;
+}
+
+.word__word {
+  font-size: 18px;
+  transition: color 300ms;
+}

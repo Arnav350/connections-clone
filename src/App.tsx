@@ -5,6 +5,7 @@ import { Row } from "./components/Row";
 import { Settings } from "./components/Settings";
 import { Help } from "./components/Help";
 import "./App.css";
+import { Main } from "./components/Main";
 
 function App() {
   const [dark, setDark] = useState<boolean>(false);
@@ -18,6 +19,7 @@ function App() {
       <Row dark={dark} setDark={setDark} setShowSettings={setShowSettings} setShowHelp={setShowHelp} />
       {showSettings && <Settings setShowSettings={setShowSettings} />}
       {showHelp && <Help setShowHelp={setShowHelp} />}
+      <Main />
     </div>
   );
 }
