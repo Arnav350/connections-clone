@@ -236,10 +236,12 @@
 }
 
 .main__words {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   width: 512px;
+  height: 360px;
 }
 
 .main__mistakes {
@@ -256,14 +258,15 @@
 .main__button {
   padding: 12px 16px;
   font-size: 16px;
-  border: #000 1px solid;
+  border: #7f7f7f 1px solid;
+  color: #7f7f7f;
   border-radius: 32px;
   font-weight: 600;
 }
 
-.main__submit {
-  color: #544c43;
-  border-color: #544c43;
+.main__shuffle {
+  border-color: #000;
+  color: #000;
 }
 
 .test {
@@ -275,13 +278,18 @@
 /* Word */
 
 .word__container {
+  position: absolute;
+  padding: 8px;
+  transition: top 300ms, left 300ms;
+}
+
+.word__box {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
   height: 80px;
   width: 120px;
-  background-color: #b9b0a6;
+  background-color: #efefe6;
   border-radius: 8px;
   transition: background-color 300ms;
 }
