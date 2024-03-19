@@ -18,7 +18,7 @@ export const Help = ({ setShowHelp }: IProps) => {
           </li>
           <li>Find the groups without making 4 mistakes!</li>
         </ul>
-        <h6 className="help__title">Category Examples</h6>
+        <h6 className="help__subheading">Category Examples</h6>
         <ul className="help__list">
           <li>FISH: Bass, Flounder, Salmon, Trout</li>
           <li>FIRE ___: Ant, Drill, Island, Opal</li>

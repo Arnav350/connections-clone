@@ -24,7 +24,7 @@ export const Square = ({ square, selectedList, setSelectedList }: IProps) => {
   return (
     <div
       className="word__container"
-      style={{ top: Math.floor(square.position / 4) * 88, left: (square.position % 4) * 128 }}
+      style={{ top: Math.floor(square.position / 4) * 88, left: (square.position % 4) * 158 }}
     >
       <button
         className="word__box"
@@ -38,7 +38,6 @@ export const Square = ({ square, selectedList, setSelectedList }: IProps) => {
         <h4 className="word__word" style={selected ? { color: "#fff" } : {}}>
           {square.word}
         </h4>
-        {square.position}
       </button>
     </div>
   );

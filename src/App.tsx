@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Header } from "./components/Header";
-import { Title } from "./components/Title";
 import { Row } from "./components/Row";
 import { Settings } from "./components/Settings";
 import { Help } from "./components/Help";
@@ -15,7 +14,6 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Title />
       <Row dark={dark} setDark={setDark} setShowSettings={setShowSettings} setShowHelp={setShowHelp} />
       {showSettings && <Settings setShowSettings={setShowSettings} />}
       {showHelp && <Help setShowHelp={setShowHelp} />}

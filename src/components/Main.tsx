@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaCircle } from "react-icons/fa6";
+import { Solved } from "./Solved";
 import { Square } from "./Square";
 import connections from "../connections.json";
 
@@ -11,11 +12,10 @@ export interface ISquare {
   position: number;
 }
 
-interface ISolved {
+export interface ISolved {
   category: string;
   words: string;
   level: TLevel;
-  solved: boolean;
 }
 
 export const Main = () => {
@@ -35,13 +35,13 @@ export const Main = () => {
     category: group,
     words: members.join(", "),
     level: level as TLevel,
-    solved: false,
   }));
 
   const [squares, setSquares] = useState<ISquare[]>(initSquares);
   const [selectedList, setSelectedList] = useState<ISquare[]>([]);
   const [mistakes, setMistakes] = useState<number>(4);
-  const [solvedList, setSolvedList] = useState<ISolved[]>(initSolved);
+  const [unsolvedList, setUnsolvedList] = useState<ISolved[]>(initSolved);
+  const [solvedList, setSolvedList] = useState<ISolved[]>([]);
 
   function handleShuffle() {
     const positions: number[] = squares.map(({ position }) => position);
@@ -57,23 +57,25 @@ export const Main = () => {
     const colorSet: Set<TLevel> = new Set(selectedList.map((selected) => selected.level));
 
     if (colorSet.size === 1) {
-      const swapList = selectedList.filter((selected) => selected.position > 3).map((selected) => selected.position);
-      const squaresList = squares.map((square) => ({ ...square }));
+      const curSquares = squares.map((square) => ({ ...square }));
+
+      const swapList = curSquares
+        .map(({ level, position }, index) => ({ level, position, index }))
+        .filter(({ level, position }) => level === selectedList[0].level && position > 3);
 
       for (let i = 0; i < 4; i++) {
-        if (squaresList[i].level !== selectedList[0].level) {
-          const squareIndex = squaresList.findIndex((square) => square.position === swapList[0]);
+        const swapSquare = curSquares.findIndex(
+          (curSquare) => curSquare.position === i && curSquare.level !== selectedList[0].level
+        );
 
-          if (squareIndex !== -1) {
-            squaresList[squareIndex].position = squaresList[i].position;
-          }
-
-          squaresList[i].position = swapList[0];
+        if (swapSquare !== -1) {
+          curSquares[swapList[0].index].position = curSquares[swapSquare].position;
+          curSquares[swapSquare].position = swapList[0].position;
           swapList.shift();
         }
       }
 
-      setSquares(squaresList);
+      setSquares(curSquares);
 
       setTimeout(() => {
         setSquares((prevSquares) =>
@@ -82,12 +84,13 @@ export const Main = () => {
             .map((prevSquare) => ({ ...prevSquare, position: prevSquare.position - 4 }))
         );
 
-        setSolvedList((prevSolveds) =>
-          prevSolveds
-            .map((prevSolved) =>
-              prevSolved.level === selectedList[0].level ? { ...prevSolved, solved: true } : prevSolved
-            )
-            .sort((prevSolved) => (prevSolved.solved ? -1 : 1))
+        setSolvedList((prevSolveds) => [
+          ...prevSolveds,
+          unsolvedList[unsolvedList.findIndex((unsolved) => unsolved.level === selectedList[0].level)],
+        ]);
+
+        setUnsolvedList((prevUnsolveds) =>
+          prevUnsolveds.filter((prevUnsolved) => prevUnsolved.level !== selectedList[0].level)
         );
 
         setSelectedList([]);
@@ -105,17 +108,13 @@ export const Main = () => {
       <h4 className="main__heading">Create four groups of four!</h4>
       <div className="main__box">
         {solvedList.map((solved, i) => (
-          <div
-            key={i}
-            className={`main__solved main__solved${solved.level}`}
-            style={solved.solved ? {} : { display: "none" }}
-          ></div>
+          <Solved key={i} solved={solved} />
         ))}
         <div className="main__words">
           {squares.map((square, i) => (
             <Square
               key={i}
-              square={{ ...square, word: square.word.toUpperCase() }}
+              square={{ ...square, word: square.word }}
               selectedList={selectedList}
               setSelectedList={setSelectedList}
             />
