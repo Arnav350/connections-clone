@@ -1,36 +1,47 @@
 import { useState } from "react";
-import { Square } from "./Square";
 import { FaCircle } from "react-icons/fa6";
+import { Square } from "./Square";
+import connections from "../connections.json";
 
-type TColor = "yellow" | "green" | "blue" | "purple";
+type TLevel = 0 | 1 | 2 | 3;
 
 export interface ISquare {
   word: string;
-  color: TColor;
+  level: TLevel;
   position: number;
 }
 
+interface ISolved {
+  category: string;
+  words: string;
+  level: TLevel;
+  solved: boolean;
+}
+
 export const Main = () => {
-  const [squares, setSquares] = useState<ISquare[]>([
-    { word: "Dirty", color: "blue", position: 0 },
-    { word: "Stand", color: "yellow", position: 1 },
-    { word: "Up", color: "purple", position: 2 },
-    { word: "Tell", color: "blue", position: 3 },
-    { word: "Live", color: "yellow", position: 4 },
-    { word: "Serious", color: "green", position: 5 },
-    { word: "That", color: "purple", position: 6 },
-    { word: "Realize", color: "purple", position: 7 },
-    { word: "Champion", color: "green", position: 8 },
-    { word: "Eyes", color: "yellow", position: 9 },
-    { word: "Book", color: "green", position: 10 },
-    { word: "Mouse", color: "blue", position: 11 },
-    { word: "Screen", color: "green", position: 12 },
-    { word: "Circle", color: "blue", position: 13 },
-    { word: "Bulb", color: "purple", position: 14 },
-    { word: "Sticky", color: "yellow", position: 15 },
-  ]);
+  const initConnections = connections[Math.floor(Math.random() * connections.length)].answers;
+  const initSquares: ISquare[] = initConnections
+    .map((initConnection) =>
+      initConnection.members.map((member) => ({
+        position: 0,
+        level: initConnection.level as TLevel,
+        word: member,
+      }))
+    )
+    .flat()
+    .sort(() => 0.5 - Math.random())
+    .map((square, index) => ({ ...square, position: index }));
+  const initSolved: ISolved[] = initConnections.map(({ group, members, level }) => ({
+    category: group,
+    words: members.join(", "),
+    level: level as TLevel,
+    solved: false,
+  }));
+
+  const [squares, setSquares] = useState<ISquare[]>(initSquares);
   const [selectedList, setSelectedList] = useState<ISquare[]>([]);
   const [mistakes, setMistakes] = useState<number>(4);
+  const [solvedList, setSolvedList] = useState<ISolved[]>(initSolved);
 
   function handleShuffle() {
     const positions: number[] = squares.map(({ position }) => position);
@@ -39,17 +50,48 @@ export const Main = () => {
       [positions[i], positions[j]] = [positions[j], positions[i]];
     }
 
-    setSquares((prevSquares) => prevSquares.map((elem, i) => ({ ...elem, position: positions[i] })));
+    setSquares((prevSquares) => prevSquares.map((prevSquare, i) => ({ ...prevSquare, position: positions[i] })));
   }
 
   function handleSubmit() {
-    const colorSet: Set<TColor> = new Set(selectedList.map((selected) => selected.color));
+    const colorSet: Set<TLevel> = new Set(selectedList.map((selected) => selected.level));
 
     if (colorSet.size === 1) {
-      const swapList = squares.filter((square) => square.position > 3 && square.color === selectedList[0].color);
-      // setSquares((prevSquares) => prevSquares.map(())
+      const swapList = selectedList.filter((selected) => selected.position > 3).map((selected) => selected.position);
+      const squaresList = squares.map((square) => ({ ...square }));
 
-      // );
+      for (let i = 0; i < 4; i++) {
+        if (squaresList[i].level !== selectedList[0].level) {
+          const squareIndex = squaresList.findIndex((square) => square.position === swapList[0]);
+
+          if (squareIndex !== -1) {
+            squaresList[squareIndex].position = squaresList[i].position;
+          }
+
+          squaresList[i].position = swapList[0];
+          swapList.shift();
+        }
+      }
+
+      setSquares(squaresList);
+
+      setTimeout(() => {
+        setSquares((prevSquares) =>
+          prevSquares
+            .filter((prevSquare) => prevSquare.position > 3)
+            .map((prevSquare) => ({ ...prevSquare, position: prevSquare.position - 4 }))
+        );
+
+        setSolvedList((prevSolveds) =>
+          prevSolveds
+            .map((prevSolved) =>
+              prevSolved.level === selectedList[0].level ? { ...prevSolved, solved: true } : prevSolved
+            )
+            .sort((prevSolved) => (prevSolved.solved ? -1 : 1))
+        );
+
+        setSelectedList([]);
+      }, 250);
     } else {
       if (mistakes === 1) {
       } else {
@@ -61,15 +103,24 @@ export const Main = () => {
   return (
     <div className="main__container">
       <h4 className="main__heading">Create four groups of four!</h4>
-      <div className="main__words">
-        {squares.map((square, i) => (
-          <Square
+      <div className="main__box">
+        {solvedList.map((solved, i) => (
+          <div
             key={i}
-            square={{ ...square, word: square.word.toUpperCase() }}
-            selectedList={selectedList}
-            setSelectedList={setSelectedList}
-          />
+            className={`main__solved main__solved${solved.level}`}
+            style={solved.solved ? {} : { display: "none" }}
+          ></div>
         ))}
+        <div className="main__words">
+          {squares.map((square, i) => (
+            <Square
+              key={i}
+              square={{ ...square, word: square.word.toUpperCase() }}
+              selectedList={selectedList}
+              setSelectedList={setSelectedList}
+            />
+          ))}
+        </div>
       </div>
       <div className="main__mistakes">
         <p className="main__remaining">Mistakes remaining:</p>

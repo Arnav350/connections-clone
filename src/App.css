@@ -235,13 +235,36 @@
   align-items: center;
 }
 
-.main__words {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.main__box {
   width: 512px;
   height: 360px;
+}
+
+.main__solved {
+  margin: 8px 0 0 8px;
+  width: 504px;
+  height: 80px;
+  border-radius: 8px;
+}
+
+.main__solved0 {
+  background-color: #f9df6d;
+}
+
+.main__solved1 {
+  background-color: #a0c35a;
+}
+
+.main__solved2 {
+  background-color: #b0c4ef;
+}
+
+.main__solved3 {
+  background-color: #ba81c5;
+}
+
+.main__words {
+  position: relative;
 }
 
 .main__mistakes {
@@ -268,12 +291,6 @@
   border-color: #000;
   color: #000;
 }
-
-.test {
-  position: absolute;
-  transition: top 200ms, left 200ms;
-}
-
 
 /* Word */
 
