@@ -10,6 +10,7 @@ export interface ISquare {
   word: string;
   level: TLevel;
   position: number;
+  display?: boolean;
 }
 
 export interface ISolved {
@@ -38,10 +39,37 @@ export const Main = () => {
   }));
 
   const [squares, setSquares] = useState<ISquare[]>(initSquares);
-  const [selectedList, setSelectedList] = useState<ISquare[]>([]);
-  const [mistakes, setMistakes] = useState<number>(4);
   const [unsolvedList, setUnsolvedList] = useState<ISolved[]>(initSolved);
   const [solvedList, setSolvedList] = useState<ISolved[]>([]);
+  const [selectedList, setSelectedList] = useState<ISquare[]>([]);
+  const [mistakes, setMistakes] = useState<number>(4);
+  const [showAway, setShowAway] = useState<boolean>(false);
+
+  function handleNew() {
+    let newConnections = connections[Math.floor(Math.random() * connections.length)].answers;
+    while (newConnections === initConnections) {
+      newConnections = connections[Math.floor(Math.random() * connections.length)].answers;
+    }
+    const newSquares: ISquare[] = newConnections
+      .map((newConnection) =>
+        newConnection.members.map((member) => ({
+          position: 0,
+          level: newConnection.level as TLevel,
+          word: member,
+        }))
+      )
+      .flat()
+      .sort(() => 0.5 - Math.random())
+      .map((square, index) => ({ ...square, position: index }));
+    const newSolved: ISolved[] = newConnections.map(({ group, members, level }) => ({
+      category: group,
+      words: members.join(", "),
+      level: level as TLevel,
+    }));
+
+    setSquares(newSquares);
+    setUnsolvedList(newSolved);
+  }
 
   function handleShuffle() {
     const positions: number[] = squares.map(({ position }) => position);
@@ -54,16 +82,22 @@ export const Main = () => {
   }
 
   function handleSubmit() {
-    const colorSet: Set<TLevel> = new Set(selectedList.map((selected) => selected.level));
+    const levelCount: Record<number, number> = {};
 
-    if (colorSet.size === 1) {
+    selectedList.forEach((selected) => {
+      levelCount[selected.level] = (levelCount[selected.level] || 0) + 1;
+    });
+
+    const counts = Object.values(levelCount);
+
+    if (counts.includes(4)) {
       const curSquares = squares.map((square) => ({ ...square }));
 
       const swapList = curSquares
         .map(({ level, position }, index) => ({ level, position, index }))
-        .filter(({ level, position }) => level === selectedList[0].level && position > 3);
+        .filter(({ level, position }) => level === selectedList[0].level && position > solvedList.length * 4 + 3);
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = solvedList.length * 4; i < solvedList.length * 4 + 4; i++) {
         const swapSquare = curSquares.findIndex(
           (curSquare) => curSquare.position === i && curSquare.level !== selectedList[0].level
         );
@@ -78,12 +112,6 @@ export const Main = () => {
       setSquares(curSquares);
 
       setTimeout(() => {
-        setSquares((prevSquares) =>
-          prevSquares
-            .filter((prevSquare) => prevSquare.position > 3)
-            .map((prevSquare) => ({ ...prevSquare, position: prevSquare.position - 4 }))
-        );
-
         setSolvedList((prevSolveds) => [
           ...prevSolveds,
           unsolvedList[unsolvedList.findIndex((unsolved) => unsolved.level === selectedList[0].level)],
@@ -96,7 +124,14 @@ export const Main = () => {
         setSelectedList([]);
       }, 250);
     } else {
-      if (mistakes === 1) {
+      if (counts.includes(3)) {
+        setShowAway(true);
+
+        setTimeout(() => setShowAway(false), 1000);
+      } else {
+      }
+      if (mistakes === 0) {
+        alert("Game Over");
       } else {
         setMistakes(mistakes - 1);
       }
@@ -107,19 +142,19 @@ export const Main = () => {
     <div className="main__container">
       <h4 className="main__heading">Create four groups of four!</h4>
       <div className="main__box">
+        {showAway && <div className="main__away">1 Away</div>}
         {solvedList.map((solved, i) => (
           <Solved key={i} solved={solved} />
         ))}
-        <div className="main__words">
-          {squares.map((square, i) => (
-            <Square
-              key={i}
-              square={{ ...square, word: square.word }}
-              selectedList={selectedList}
-              setSelectedList={setSelectedList}
-            />
-          ))}
-        </div>
+        {squares.map((square, i) => (
+          <Square
+            key={i}
+            square={{ ...square, word: square.word }}
+            selectedList={selectedList}
+            setSelectedList={setSelectedList}
+          />
+        ))}
+        {/* </div> */}
       </div>
       <div className="main__mistakes">
         <p className="main__remaining">Mistakes remaining:</p>
@@ -128,6 +163,9 @@ export const Main = () => {
         ))}
       </div>
       <div className="main__buttons">
+        <button className="main__button main__new" onClick={handleNew}>
+          New Game
+        </button>
         <button className="main__button main__shuffle" onClick={handleShuffle}>
           Shuffle
         </button>

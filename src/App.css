@@ -224,12 +224,21 @@
 }
 
 .main__box {
+  position: relative;
   width: 640px;
   height: 360px;
 }
 
-.main__words {
-  position: relative;
+.main__away {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  padding: 8px 16px;
+  background-color: #5a594e;
+  border-radius: 8px;
+  color: #fff;
 }
 
 .main__mistakes {
@@ -252,6 +261,7 @@
   font-weight: 400;
 }
 
+.main__new,
 .main__shuffle {
   border-color: #000;
   color: #000;
@@ -260,6 +270,8 @@
 /* Solved */
 
 .solved__container {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -296,15 +308,15 @@
   font-weight: 400;
 }
 
-/* Word */
+/* Square */
 
-.word__container {
+.square__container {
   position: absolute;
   padding: 8px;
   transition: top 300ms, left 300ms;
 }
 
-.word__box {
+.square__box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -315,7 +327,7 @@
   transition: background-color 300ms;
 }
 
-.word__word {
+.square__word {
   font-size: 20px;
   transition: color 300ms;
 }

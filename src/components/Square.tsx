@@ -23,11 +23,11 @@ export const Square = ({ square, selectedList, setSelectedList }: IProps) => {
 
   return (
     <div
-      className="word__container"
+      className={`square__container square__${square.display}`}
       style={{ top: Math.floor(square.position / 4) * 88, left: (square.position % 4) * 158 }}
     >
       <button
-        className="word__box"
+        className="square__box"
         style={selected ? { backgroundColor: "#5a594e" } : selectedList.length === 4 ? { cursor: "default" } : {}}
         onClick={handleClick}
       >
@@ -35,9 +35,10 @@ export const Square = ({ square, selectedList, setSelectedList }: IProps) => {
         {square.level === 1 && <p>1</p>}
         {square.level === 2 && <p>2</p>}
         {square.level === 3 && <p>3</p>}
-        <h4 className="word__word" style={selected ? { color: "#fff" } : {}}>
+        <h4 className="square__word" style={selected ? { color: "#fff" } : {}}>
           {square.word}
         </h4>
+        {square.position}
       </button>
     </div>
   );
