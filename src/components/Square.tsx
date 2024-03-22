@@ -23,7 +23,7 @@ export const Square = ({ square, selectedList, setSelectedList }: IProps) => {
 
   return (
     <div
-      className={`square__container square__${square.display}`}
+      className="square__container"
       style={{ top: Math.floor(square.position / 4) * 88, left: (square.position % 4) * 158 }}
     >
       <button

@@ -10,12 +10,11 @@ export interface ISquare {
   word: string;
   level: TLevel;
   position: number;
-  display?: boolean;
 }
 
 export interface ISolved {
   category: string;
-  words: string;
+  words: string[];
   level: TLevel;
 }
 
@@ -34,7 +33,7 @@ export const Main = () => {
     .map((square, index) => ({ ...square, position: index }));
   const initSolved: ISolved[] = initConnections.map(({ group, members, level }) => ({
     category: group,
-    words: members.join(", "),
+    words: members,
     level: level as TLevel,
   }));
 
@@ -44,6 +43,7 @@ export const Main = () => {
   const [selectedList, setSelectedList] = useState<ISquare[]>([]);
   const [mistakes, setMistakes] = useState<number>(4);
   const [showAway, setShowAway] = useState<boolean>(false);
+  const [showNext, setShowNext] = useState<boolean>(false);
 
   function handleNew() {
     let newConnections = connections[Math.floor(Math.random() * connections.length)].answers;
@@ -63,7 +63,7 @@ export const Main = () => {
       .map((square, index) => ({ ...square, position: index }));
     const newSolved: ISolved[] = newConnections.map(({ group, members, level }) => ({
       category: group,
-      words: members.join(", "),
+      words: members,
       level: level as TLevel,
     }));
 
@@ -126,12 +126,16 @@ export const Main = () => {
     } else {
       if (counts.includes(3)) {
         setShowAway(true);
-
         setTimeout(() => setShowAway(false), 1000);
       } else {
       }
       if (mistakes === 0) {
-        alert("Game Over");
+        setShowNext(true);
+        setTimeout(() => setShowNext(false), 1000);
+
+        unsolvedList.forEach((unsolved) => {
+          setSelectedList(squares.filter((square) => unsolved.words.includes(square.word)));
+        });
       } else {
         setMistakes(mistakes - 1);
       }
@@ -142,7 +146,8 @@ export const Main = () => {
     <div className="main__container">
       <h4 className="main__heading">Create four groups of four!</h4>
       <div className="main__box">
-        {showAway && <div className="main__away">1 Away</div>}
+        {showAway && <div className="main__away">One Away...</div>}
+        {showNext && <div className="main__next">Next Time</div>}
         {solvedList.map((solved, i) => (
           <Solved key={i} solved={solved} />
         ))}

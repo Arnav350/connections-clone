@@ -229,15 +229,16 @@
   height: 360px;
 }
 
-.main__away {
+.main__away,
+.main__next {
   position: absolute;
-  top: 50%;
+  top: -32px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 1;
-  padding: 8px 16px;
-  background-color: #5a594e;
-  border-radius: 8px;
+  padding: 12px 16px;
+  background-color: #000;
+  border-radius: 4px;
   color: #fff;
 }
 
