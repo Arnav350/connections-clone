@@ -81,6 +81,41 @@ export const Main = () => {
     setSquares((prevSquares) => prevSquares.map((prevSquare, i) => ({ ...prevSquare, position: positions[i] })));
   }
 
+  function submitCorrect() {
+    const curSquares = squares.map((square) => ({ ...square }));
+
+    const swapList = curSquares
+      .map(({ level, position }, index) => ({ level, position, index }))
+      .filter(({ level, position }) => level === selectedList[0].level && position > solvedList.length * 4 + 3);
+
+    for (let i = solvedList.length * 4; i < solvedList.length * 4 + 4; i++) {
+      const swapSquare = curSquares.findIndex(
+        (curSquare) => curSquare.position === i && curSquare.level !== selectedList[0].level
+      );
+
+      if (swapSquare !== -1) {
+        curSquares[swapList[0].index].position = curSquares[swapSquare].position;
+        curSquares[swapSquare].position = swapList[0].position;
+        swapList.shift();
+      }
+    }
+
+    setSquares(curSquares);
+
+    setTimeout(() => {
+      setSolvedList((prevSolveds) => [
+        ...prevSolveds,
+        unsolvedList[unsolvedList.findIndex((unsolved) => unsolved.level === selectedList[0].level)],
+      ]);
+
+      setUnsolvedList((prevUnsolveds) =>
+        prevUnsolveds.filter((prevUnsolved) => prevUnsolved.level !== selectedList[0].level)
+      );
+
+      setSelectedList([]);
+    }, 250);
+  }
+
   function handleSubmit() {
     const levelCount: Record<number, number> = {};
 
@@ -91,38 +126,7 @@ export const Main = () => {
     const counts = Object.values(levelCount);
 
     if (counts.includes(4)) {
-      const curSquares = squares.map((square) => ({ ...square }));
-
-      const swapList = curSquares
-        .map(({ level, position }, index) => ({ level, position, index }))
-        .filter(({ level, position }) => level === selectedList[0].level && position > solvedList.length * 4 + 3);
-
-      for (let i = solvedList.length * 4; i < solvedList.length * 4 + 4; i++) {
-        const swapSquare = curSquares.findIndex(
-          (curSquare) => curSquare.position === i && curSquare.level !== selectedList[0].level
-        );
-
-        if (swapSquare !== -1) {
-          curSquares[swapList[0].index].position = curSquares[swapSquare].position;
-          curSquares[swapSquare].position = swapList[0].position;
-          swapList.shift();
-        }
-      }
-
-      setSquares(curSquares);
-
-      setTimeout(() => {
-        setSolvedList((prevSolveds) => [
-          ...prevSolveds,
-          unsolvedList[unsolvedList.findIndex((unsolved) => unsolved.level === selectedList[0].level)],
-        ]);
-
-        setUnsolvedList((prevUnsolveds) =>
-          prevUnsolveds.filter((prevUnsolved) => prevUnsolved.level !== selectedList[0].level)
-        );
-
-        setSelectedList([]);
-      }, 250);
+      submitCorrect();
     } else {
       if (counts.includes(3)) {
         setShowAway(true);
@@ -133,8 +137,12 @@ export const Main = () => {
         setShowNext(true);
         setTimeout(() => setShowNext(false), 1000);
 
-        unsolvedList.forEach((unsolved) => {
-          setSelectedList(squares.filter((square) => unsolved.words.includes(square.word)));
+        unsolvedList.forEach((unsolved, i) => {
+          setTimeout(() => {
+            setSelectedList(squares.filter((square) => unsolved.words.includes(square.word)));
+            console.log("test");
+            // submitCorrect();
+          }, i * 1000);
         });
       } else {
         setMistakes(mistakes - 1);
