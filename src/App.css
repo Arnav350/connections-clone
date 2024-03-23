@@ -229,8 +229,23 @@
   height: 360px;
 }
 
+@keyframes win {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 .main__away,
-.main__next {
+.main__next,
+.main__win {
   position: absolute;
   top: -40px;
   left: 50%;
@@ -240,6 +255,11 @@
   background-color: #000;
   border-radius: 4px;
   color: #fff;
+}
+
+.main__win {
+  opacity: 0;
+  animation: win 1s linear;
 }
 
 .main__mistakes {
