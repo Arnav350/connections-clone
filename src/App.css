@@ -270,6 +270,25 @@
 
 /* Solved */
 
+@keyframes solved {
+  0% {
+    opacity: 0;
+    scale: 1;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    scale: 1.2;
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
 .solved__container {
   position: relative;
   z-index: 10;
@@ -282,6 +301,7 @@
   height: 80px;
   width: 624px;
   border-radius: 8px;
+  animation: solved 500ms ease-in-out;
 }
 
 .solved__container0 {
