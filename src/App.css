@@ -90,10 +90,11 @@
   opacity: 0;
 }
 
-/* Settings / Help */
+/* Settings / Help / Results */
 
 .settings__container,
-.help__container {
+.help__container,
+.results__container {
   position: absolute;
   z-index: 1;
   top: 0;
@@ -104,7 +105,8 @@
 }
 
 .settings__box,
-.help__box {
+.help__box,
+.results__box {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -119,7 +121,8 @@
 }
 
 .settings__close,
-.help__close {
+.help__close,
+.results__close {
   position: absolute;
   top: 24px;
   right: 24px;
@@ -127,7 +130,8 @@
 }
 
 .settings__close:hover,
-.help__close:hover {
+.help__close:hover,
+.results__close:hover {
   cursor: pointer;
 }
 
@@ -185,19 +189,23 @@
   border-radius: 4px;
 }
 
-.help__yellow {
+.help__yellow,
+.results__yellow {
   background-color: #f9df6d;
 }
 
-.help__green {
+.help__green,
+.results__green {
   background-color: #a0c35a;
 }
 
-.help__blue {
+.help__blue,
+.results__blue {
   background-color: #b0c4ef;
 }
 
-.help__purple {
+.help__purple,
+.results__purple {
   background-color: #ba81c5;
 }
 
@@ -229,7 +237,7 @@
   height: 360px;
 }
 
-@keyframes win {
+@keyframes result {
   0% {
     opacity: 1;
   }
@@ -245,7 +253,7 @@
 
 .main__away,
 .main__next,
-.main__win {
+.main__result {
   position: absolute;
   top: -40px;
   left: 50%;
@@ -257,9 +265,9 @@
   color: #fff;
 }
 
-.main__win {
+.main__result {
   opacity: 0;
-  animation: win 1s linear;
+  animation: result 1s linear;
 }
 
 .main__mistakes {

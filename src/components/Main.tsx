@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FaCircle } from "react-icons/fa6";
 import { Solved } from "./Solved";
 import { Square } from "./Square";
@@ -18,7 +18,12 @@ export interface ISolved {
   level: TLevel;
 }
 
-export const Main = () => {
+interface IProps {
+  result: string;
+  setResult: Dispatch<SetStateAction<string>>;
+}
+
+export const Main = ({ result, setResult }: IProps) => {
   const initConnections = connections[Math.floor(Math.random() * connections.length)].answers;
   const initSquares: ISquare[] = initConnections
     .map((initConnection) =>
@@ -41,8 +46,8 @@ export const Main = () => {
   const [unsolvedList, setUnsolvedList] = useState<ISolved[]>(initSolved);
   const [solvedList, setSolvedList] = useState<ISolved[]>([]);
   const [selectedList, setSelectedList] = useState<ISquare[]>([]);
+  const [attemptList, setAttemptList] = useState<ISquare[][]>([]);
   const [mistakes, setMistakes] = useState<number>(4);
-  const [win, setWin] = useState<string>("");
   const [showAway, setShowAway] = useState<boolean>(false);
   const [showNext, setShowNext] = useState<boolean>(false);
 
@@ -101,6 +106,8 @@ export const Main = () => {
 
     const counts = Object.values(levelCount);
 
+    setAttemptList((prevAttemptList) => [...prevAttemptList, selectedList]);
+
     if (counts.includes(4)) {
       const curSquares = squares.map((square) => ({ ...square }));
 
@@ -155,7 +162,7 @@ export const Main = () => {
             break;
         }
 
-        setWin(text);
+        setResult(text);
       }
     } else {
       if (counts.includes(3)) {
@@ -200,6 +207,8 @@ export const Main = () => {
             setUnsolvedList((prevUnsolveds) => prevUnsolveds.filter((prevUnsolved) => prevUnsolved.level !== level));
           }, 1000 * i);
         });
+
+        setResult("Next Time!");
       } else {
         setMistakes(mistakes - 1);
       }
@@ -212,7 +221,7 @@ export const Main = () => {
       <div className="main__box">
         {showAway && <div className="main__away">One Away...</div>}
         {showNext && <div className="main__next">Next Time</div>}
-        {win && <div className="main__win">{win}</div>}
+        {result && <div className="main__result">{result}</div>}
         {solvedList.map((solved, i) => (
           <Solved key={i} solved={solved} />
         ))}
