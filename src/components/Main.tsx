@@ -77,12 +77,14 @@ export const Main = () => {
   }
 
   function handleShuffle() {
-    const positions: number[] = squares.map(({ position }) => position);
+    const positions: number[] = Array(16)
+      .fill(0)
+      .map((__, i) => i);
+
+    console.log(positions);
     for (let i = positions.length - 1; i >= solvedList.length * 4; i--) {
       const j = Math.floor(Math.random() * (i + 1 - solvedList.length * 4) + solvedList.length * 4);
       [positions[i], positions[j]] = [positions[j], positions[i]];
-
-      console.log(i + " " + j);
     }
 
     setSquares((prevSquares) =>
