@@ -1,6 +1,11 @@
+import { Dispatch, SetStateAction } from "react";
 import ap from "../assets/ap.png";
 
-export const Header = () => {
+interface IProps {
+  setShowCreator: Dispatch<SetStateAction<boolean>>;
+}
+
+export const Header = ({ setShowCreator }: IProps) => {
   return (
     <header className="header__container">
       <div className="header__left">
@@ -10,7 +15,9 @@ export const Header = () => {
         <div className="header__line"></div>
         <h2 className="header__heading">Connections</h2>
       </div>
-      <button className="header__create">Create Your Own</button>
+      <button className="header__create" onClick={() => setShowCreator(true)}>
+        Create Your Own
+      </button>
     </header>
   );
 };

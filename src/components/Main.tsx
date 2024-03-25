@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { FaCircle } from "react-icons/fa6";
+import { Creator } from "./Creator";
 import { Solved } from "./Solved";
 import { Square } from "./Square";
 import connections from "../connections.json";
@@ -21,9 +22,13 @@ export interface ISolved {
 interface IProps {
   result: string;
   setResult: Dispatch<SetStateAction<string>>;
+  setShowResults: Dispatch<SetStateAction<boolean>>;
+  setAttemptList: Dispatch<SetStateAction<ISquare[][]>>;
+  showCreator: boolean;
+  setShowCreator: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Main = ({ result, setResult }: IProps) => {
+export const Main = ({ result, setResult, setShowResults, setAttemptList, showCreator, setShowCreator }: IProps) => {
   const initConnections = connections[Math.floor(Math.random() * connections.length)].answers;
   const initSquares: ISquare[] = initConnections
     .map((initConnection) =>
@@ -46,7 +51,6 @@ export const Main = ({ result, setResult }: IProps) => {
   const [unsolvedList, setUnsolvedList] = useState<ISolved[]>(initSolved);
   const [solvedList, setSolvedList] = useState<ISolved[]>([]);
   const [selectedList, setSelectedList] = useState<ISquare[]>([]);
-  const [attemptList, setAttemptList] = useState<ISquare[][]>([]);
   const [mistakes, setMistakes] = useState<number>(4);
   const [showAway, setShowAway] = useState<boolean>(false);
   const [showNext, setShowNext] = useState<boolean>(false);
@@ -163,6 +167,7 @@ export const Main = ({ result, setResult }: IProps) => {
         }
 
         setResult(text);
+        setShowResults(true);
       }
     } else {
       if (counts.includes(3)) {
@@ -217,57 +222,71 @@ export const Main = ({ result, setResult }: IProps) => {
 
   return (
     <div className="main__container">
-      <h4 className="main__heading">Create four groups of four!</h4>
-      <div className="main__box">
-        {showAway && <div className="main__away">One Away...</div>}
-        {showNext && <div className="main__next">Next Time</div>}
-        {result && <div className="main__result">{result}</div>}
-        {solvedList.map((solved, i) => (
-          <Solved key={i} solved={solved} />
-        ))}
-        {squares.map((square, i) => (
-          <Square
-            key={i}
-            square={{ ...square, word: square.word }}
-            selectedList={selectedList}
-            setSelectedList={setSelectedList}
-          />
-        ))}
-      </div>
-      <div className="main__mistakes">
-        <p className="main__remaining">Mistakes remaining:</p>
-        {[...Array(mistakes)].map((__, i) => (
-          <FaCircle key={i} color="#5a594e" />
-        ))}
-      </div>
-      <div className="main__buttons">
-        <button className="main__button main__new" onClick={handleNew}>
-          New Game
-        </button>
-        <button className="main__button main__shuffle" onClick={handleShuffle}>
-          Shuffle
-        </button>
-        <button
-          className="main__button main__deselect"
-          style={selectedList.length ? { borderColor: "#000", color: "#000" } : { cursor: "default" }}
-          disabled={selectedList.length === 0}
-          onClick={() => setSelectedList([])}
-        >
-          Deselect All
-        </button>
-        <button
-          className="main__button main__submit"
-          style={
-            selectedList.length === 4
-              ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" }
-              : { cursor: "default" }
-          }
-          disabled={selectedList.length !== 4}
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
-      </div>
+      {showCreator ? (
+        <Creator setSquares={setSquares} setUnsolvedList={setUnsolvedList} setShowCreator={setShowCreator} />
+      ) : (
+        <div className="main__main">
+          <h4 className="main__heading">Create four groups of four!</h4>
+          <div className="main__box">
+            {showAway && <div className="main__away">One Away...</div>}
+            {showNext && <div className="main__next">Next Time</div>}
+            {result && <div className="main__result">{result}</div>}
+            {solvedList.map((solved, i) => (
+              <Solved key={i} solved={solved} />
+            ))}
+            {squares.map((square, i) => (
+              <Square
+                key={i}
+                square={{ ...square, word: square.word }}
+                selectedList={selectedList}
+                setSelectedList={setSelectedList}
+              />
+            ))}
+          </div>
+          <div className="main__mistakes">
+            <p className="main__remaining">Mistakes remaining:</p>
+            {[...Array(mistakes)].map((__, i) => (
+              <FaCircle key={i} color="#5a594e" />
+            ))}
+          </div>
+          <div className="main__buttons">
+            <button className="main__button main__new" onClick={handleNew}>
+              New Game
+            </button>
+            {result ? (
+              <button className="main__button main__view" onClick={() => setShowResults(true)}>
+                View Results
+              </button>
+            ) : (
+              <div className="main__right">
+                <button className="main__button main__shuffle" onClick={handleShuffle}>
+                  Shuffle
+                </button>
+                <button
+                  className="main__button main__deselect"
+                  style={selectedList.length ? { borderColor: "#000", color: "#000" } : { cursor: "default" }}
+                  disabled={selectedList.length === 0}
+                  onClick={() => setSelectedList([])}
+                >
+                  Deselect All
+                </button>
+                <button
+                  className="main__button main__submit"
+                  style={
+                    selectedList.length === 4
+                      ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" }
+                      : { cursor: "default" }
+                  }
+                  disabled={selectedList.length !== 4}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

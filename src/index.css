@@ -36,7 +36,8 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input {
   cursor: pointer;
   background-color: transparent;
   border: none;
