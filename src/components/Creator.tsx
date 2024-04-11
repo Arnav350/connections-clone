@@ -44,17 +44,39 @@ export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps)
         prevTempSquare.position === position ? { ...prevTempSquare, word: value } : prevTempSquare
       )
     );
+
+    // setCompleted(
+    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
+    // );
+
+    // console.log(
+    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
+    // );
   }
 
   function handleCategoryChange(value: string, level: number) {
-    setTempCategories((prevTempCategories) =>
-      prevTempCategories.map((prevTempCategory) =>
+    setTempCategories((prevTempCategories) => {
+      prevTempCategories.forEach((prevTempCategory) =>
         prevTempCategory.level === level ? { ...prevTempCategory, category: value } : prevTempCategory
-      )
-    );
-  }
+      );
 
-  function checkCompleted() {}
+      // console.log(
+      //   tempSquares.every(({ word }) => word !== "") && prevTempCategories.every(({ category }) => category !== "")
+      // );
+
+      console.log(prevTempCategories);
+
+      return prevTempCategories;
+    });
+
+    // setCompleted(
+    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
+    // );
+
+    // console.log(
+    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
+    // );
+  }
 
   function handleSubmit() {
     setShowCreator(false);
@@ -98,7 +120,8 @@ export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps)
         </button>
         <button
           className="creator__button"
-          style={4 === 4 ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" } : { cursor: "default" }}
+          disabled={!completed}
+          style={completed ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" } : { cursor: "default" }}
           onClick={handleSubmit}
         >
           Submit
