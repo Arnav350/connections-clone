@@ -46,3 +46,11 @@ input {
 img {
   width: 100%;
 }
+
+.App {
+  min-height: 100vh;
+}
+
+.dark {
+  transition: background-color 300ms, color 300ms, border-color 300ms;
+}

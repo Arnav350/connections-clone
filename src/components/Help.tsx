@@ -2,13 +2,14 @@ import { Dispatch, SetStateAction } from "react";
 import { FaArrowDownLong, FaXmark } from "react-icons/fa6";
 
 interface IProps {
+  dark: boolean;
   setShowHelp: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Help = ({ setShowHelp }: IProps) => {
+export const Help = ({ dark, setShowHelp }: IProps) => {
   return (
     <div className="help__container">
-      <div className="help__box">
+      <div className="help__box dark" style={dark ? { backgroundColor: "#121212", color: "#fefef8" } : {}}>
         <FaXmark size={32} className="help__close" onClick={() => setShowHelp(false)} />
         <h4 className="help__heading">How to Play</h4>
         <h5 className="help__subheading">Find groups of four items that share something in common.</h5>

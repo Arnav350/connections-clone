@@ -10,16 +10,24 @@ interface IProps {
 
 export const Row = ({ dark, setDark, setShowSettings, setShowHelp }: IProps) => {
   return (
-    <div className="row__container">
+    <div className="row__container dark" style={dark ? { borderColor: "#222" } : {}}>
       <button className="row__icon" onClick={() => setDark(!dark)}>
-        <FaMoon size={20} className={dark ? "row__mode row__dark" : "row__mode"} />
-        <FaSun size={20} className={dark ? "row__mode" : "row__mode row__dark"} />
+        <FaMoon
+          size={20}
+          color={dark ? "#efefe6" : ""}
+          className={dark ? "row__mode row__dark dark" : "row__mode dark"}
+        />
+        <FaSun
+          size={20}
+          color={dark ? "#efefe6" : ""}
+          className={dark ? "row__mode dark" : "row__mode row__dark dark"}
+        />
       </button>
       <button className="row__icon" onClick={() => setShowSettings(true)}>
-        <FaGear size={20} />
+        <FaGear size={20} color={dark ? "#efefe6" : ""} className="dark" />
       </button>
       <button className="row__icon" onClick={() => setShowHelp(true)}>
-        <FaRegCircleQuestion size={20} />
+        <FaRegCircleQuestion color={dark ? "#efefe6" : ""} size={20} className="dark" />
       </button>
     </div>
   );

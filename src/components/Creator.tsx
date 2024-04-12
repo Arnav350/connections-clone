@@ -39,43 +39,31 @@ export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps)
   const [completed, setCompleted] = useState<boolean>(false);
 
   function handleSquaresChange(value: string, position: number) {
-    setTempSquares((prevTempSquares) =>
-      prevTempSquares.map((prevTempSquare) =>
+    setTempSquares((prevTempSquares) => {
+      const newTempSquares = prevTempSquares.map((prevTempSquare) =>
         prevTempSquare.position === position ? { ...prevTempSquare, word: value } : prevTempSquare
-      )
-    );
+      );
 
-    // setCompleted(
-    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
-    // );
+      setCompleted(
+        newTempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
+      );
 
-    // console.log(
-    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
-    // );
+      return newTempSquares;
+    });
   }
 
   function handleCategoryChange(value: string, level: number) {
     setTempCategories((prevTempCategories) => {
-      prevTempCategories.forEach((prevTempCategory) =>
+      const newTempCategories = prevTempCategories.map((prevTempCategory) =>
         prevTempCategory.level === level ? { ...prevTempCategory, category: value } : prevTempCategory
       );
 
-      // console.log(
-      //   tempSquares.every(({ word }) => word !== "") && prevTempCategories.every(({ category }) => category !== "")
-      // );
+      setCompleted(
+        tempSquares.every(({ word }) => word !== "") && newTempCategories.every(({ category }) => category !== "")
+      );
 
-      console.log(prevTempCategories);
-
-      return prevTempCategories;
+      return newTempCategories;
     });
-
-    // setCompleted(
-    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
-    // );
-
-    // console.log(
-    //   tempSquares.every(({ word }) => word !== "") && tempCategories.every(({ category }) => category !== "")
-    // );
   }
 
   function handleSubmit() {

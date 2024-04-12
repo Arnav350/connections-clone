@@ -17,13 +17,14 @@ function App() {
   const [showCreator, setShowCreator] = useState<boolean>(false);
 
   return (
-    <div className="App">
-      <Header setShowCreator={setShowCreator} />
+    <div className="App dark" style={dark ? { backgroundColor: "#121212" } : {}}>
+      <Header dark={dark} setShowCreator={setShowCreator} />
       <Row dark={dark} setDark={setDark} setShowSettings={setShowSettings} setShowHelp={setShowHelp} />
-      {showSettings && <Settings setShowSettings={setShowSettings} />}
-      {showHelp && <Help setShowHelp={setShowHelp} />}
-      {showResults && <Results result={result} setShowResults={setShowResults} attemptList={attemptList} />}
+      {showSettings && <Settings dark={dark} setShowSettings={setShowSettings} />}
+      {showHelp && <Help dark={dark} setShowHelp={setShowHelp} />}
+      {showResults && <Results dark={dark} result={result} setShowResults={setShowResults} attemptList={attemptList} />}
       <Main
+        dark={dark}
         result={result}
         setResult={setResult}
         setShowResults={setShowResults}

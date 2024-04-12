@@ -20,6 +20,7 @@ export interface ISolved {
 }
 
 interface IProps {
+  dark: boolean;
   result: string;
   setResult: Dispatch<SetStateAction<string>>;
   setShowResults: Dispatch<SetStateAction<boolean>>;
@@ -28,7 +29,15 @@ interface IProps {
   setShowCreator: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Main = ({ result, setResult, setShowResults, setAttemptList, showCreator, setShowCreator }: IProps) => {
+export const Main = ({
+  dark,
+  result,
+  setResult,
+  setShowResults,
+  setAttemptList,
+  showCreator,
+  setShowCreator,
+}: IProps) => {
   const initConnections = connections[Math.floor(Math.random() * connections.length)].answers;
   const initSquares: ISquare[] = initConnections
     .map((initConnection) =>
@@ -77,6 +86,7 @@ export const Main = ({ result, setResult, setShowResults, setAttemptList, showCr
       level: level as TLevel,
     }));
 
+    setResult("");
     setSelectedList([]);
     setSolvedList([]);
     setSquares(newSquares);
@@ -90,7 +100,6 @@ export const Main = ({ result, setResult, setShowResults, setAttemptList, showCr
       .fill(0)
       .map((__, i) => i);
 
-    console.log(positions);
     for (let i = positions.length - 1; i >= solvedList.length * 4; i--) {
       const j = Math.floor(Math.random() * (i + 1 - solvedList.length * 4) + solvedList.length * 4);
       [positions[i], positions[j]] = [positions[j], positions[i]];
@@ -226,7 +235,9 @@ export const Main = ({ result, setResult, setShowResults, setAttemptList, showCr
         <Creator setSquares={setSquares} setUnsolvedList={setUnsolvedList} setShowCreator={setShowCreator} />
       ) : (
         <div className="main__main">
-          <h4 className="main__heading">Create four groups of four!</h4>
+          <h4 className="main__heading dark" style={dark ? { color: "#fefef8" } : {}}>
+            Create four groups of four!
+          </h4>
           <div className="main__box">
             {showAway && <div className="main__away">One Away...</div>}
             {showNext && <div className="main__next">Next Time</div>}
@@ -236,6 +247,7 @@ export const Main = ({ result, setResult, setShowResults, setAttemptList, showCr
             ))}
             {squares.map((square, i) => (
               <Square
+                dark={dark}
                 key={i}
                 square={{ ...square, word: square.word }}
                 selectedList={selectedList}
@@ -244,37 +256,59 @@ export const Main = ({ result, setResult, setShowResults, setAttemptList, showCr
             ))}
           </div>
           <div className="main__mistakes">
-            <p className="main__remaining">Mistakes remaining:</p>
+            <p className="main__remaining dark" style={dark ? { color: "#fefef8" } : {}}>
+              Mistakes remaining:
+            </p>
             {[...Array(mistakes)].map((__, i) => (
-              <FaCircle key={i} color="#5a594e" />
+              <FaCircle key={i} color={dark ? "#ccc" : "#5a594e"} className="dark" />
             ))}
           </div>
           <div className="main__buttons">
-            <button className="main__button main__new" onClick={handleNew}>
+            <button
+              className="main__button main__new dark"
+              style={dark ? { borderColor: "#fefef8", color: "#fefef8" } : {}}
+              onClick={handleNew}
+            >
               New Game
             </button>
             {result ? (
-              <button className="main__button main__view" onClick={() => setShowResults(true)}>
+              <button
+                className="main__button main__view dark"
+                style={dark ? { borderColor: "#fefef8", color: "#fefef8" } : {}}
+                onClick={() => setShowResults(true)}
+              >
                 View Results
               </button>
             ) : (
               <div className="main__right">
-                <button className="main__button main__shuffle" onClick={handleShuffle}>
+                <button
+                  className="main__button main__shuffle dark"
+                  style={dark ? { borderColor: "#fefef8", color: "#fefef8" } : {}}
+                  onClick={handleShuffle}
+                >
                   Shuffle
                 </button>
                 <button
-                  className="main__button main__deselect"
-                  style={selectedList.length ? { borderColor: "#000", color: "#000" } : { cursor: "default" }}
+                  className="main__button main__deselect dark"
+                  style={
+                    selectedList.length
+                      ? dark
+                        ? { borderColor: "#fefef8", color: "#fefef8" }
+                        : { borderColor: "#000", color: "#000" }
+                      : { cursor: "default" }
+                  }
                   disabled={selectedList.length === 0}
                   onClick={() => setSelectedList([])}
                 >
                   Deselect All
                 </button>
                 <button
-                  className="main__button main__submit"
+                  className="main__button main__submit dark"
                   style={
                     selectedList.length === 4
-                      ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" }
+                      ? dark
+                        ? { backgroundColor: "#fefef8", borderColor: "#fefef8", color: "#000" }
+                        : { backgroundColor: "#000", borderColor: "#000", color: "#fff" }
                       : { cursor: "default" }
                   }
                   disabled={selectedList.length !== 4}
