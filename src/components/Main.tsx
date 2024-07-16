@@ -232,7 +232,12 @@ export const Main = ({
   return (
     <div className="main__container">
       {showCreator ? (
-        <Creator setSquares={setSquares} setUnsolvedList={setUnsolvedList} setShowCreator={setShowCreator} />
+        <Creator
+          dark={dark}
+          setSquares={setSquares}
+          setUnsolvedList={setUnsolvedList}
+          setShowCreator={setShowCreator}
+        />
       ) : (
         <div className="main__main">
           <h4 className="main__heading dark" style={dark ? { color: "#fefef8" } : {}}>

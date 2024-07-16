@@ -46,14 +46,9 @@ export const Square = ({ dark, square, selectedList, setSelectedList }: IProps) 
         }
         onClick={handleClick}
       >
-        {square.level === 0 && <p>0</p>}
-        {square.level === 1 && <p>1</p>}
-        {square.level === 2 && <p>2</p>}
-        {square.level === 3 && <p>3</p>}
         <h4 className="square__word" style={dark ? { color: "#fefef8" } : selected ? { color: "#fff" } : {}}>
           {square.word}
         </h4>
-        {square.position}
       </button>
     </div>
   );

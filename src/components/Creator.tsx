@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ISolved, ISquare } from "./Main";
 
 interface IProps {
+  dark: boolean;
   setSquares: Dispatch<SetStateAction<ISquare[]>>;
   setUnsolvedList: Dispatch<SetStateAction<ISolved[]>>;
   setShowCreator: Dispatch<SetStateAction<boolean>>;
@@ -33,7 +34,7 @@ const initCategories: ISolved[] = [
   { category: "", words: [], level: 3 },
 ];
 
-export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps) => {
+export const Creator = ({ dark, setSquares, setUnsolvedList, setShowCreator }: IProps) => {
   const [tempSquares, setTempSquares] = useState<ISquare[]>(initSquares);
   const [tempCategories, setTempCategories] = useState<ISolved[]>(initCategories);
   const [completed, setCompleted] = useState<boolean>(false);
@@ -74,7 +75,9 @@ export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps)
 
   return (
     <div className="creator__container">
-      <h3 className="creator__heading">Create your own Connections</h3>
+      <h3 className="creator__heading dark" style={dark ? { color: "#fefef8" } : {}}>
+        Create your own Connections
+      </h3>
       {Array(4)
         .fill(null)
         .map((__, i) => (
@@ -103,13 +106,23 @@ export const Creator = ({ setSquares, setUnsolvedList, setShowCreator }: IProps)
           </div>
         ))}
       <div className="creator__buttons">
-        <button className="creator__button creator__disgard" onClick={() => setShowCreator(false)}>
+        <button
+          className="creator__button creator__disgard dark"
+          style={dark ? { borderColor: "#fefef8", color: "#fefef8" } : {}}
+          onClick={() => setShowCreator(false)}
+        >
           Disgard
         </button>
         <button
-          className="creator__button"
+          className="creator__button dark"
           disabled={!completed}
-          style={completed ? { backgroundColor: "#000", borderColor: "#000", color: "#fff" } : { cursor: "default" }}
+          style={
+            completed
+              ? dark
+                ? { backgroundColor: "#fefef8", borderColor: "#fefef8", color: "#000" }
+                : { backgroundColor: "#000", borderColor: "#000", color: "#fff" }
+              : { cursor: "default" }
+          }
           onClick={handleSubmit}
         >
           Submit
